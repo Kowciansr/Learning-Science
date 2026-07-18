@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learning Science and Theory: An Interactive Lesson</title>
+<meta name="description" content="An interactive foundational lesson on learning science and learning theory for EdTech professionals.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,650;1,9..144,500&family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#22304F;
+  --ink-soft:#4A5878;
+  --paper:#F3F5F1;
+  --card:#FFFFFF;
+  --line:#DDE2DA;
+  --mark:#FFD455;
+  --teal:#0E6B67;
+  --teal-soft:#E3F1F0;
+  --coral:#E4572E;      /* graphics, borders, ball fills only (3:1 non-text) */
+  --coral-ink:#B23F1B;  /* coral in any text role or under white text (AA 4.5:1) */
+  --coral-soft:#FBEAE3;
+  --radius:14px;
+  --shadow:0 2px 10px rgba(34,48,79,.08);
+  --display:"Fraunces", Georgia, serif;
+  --body:"Lexend", "Segoe UI", system-ui, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.65;font-weight:300;font-size:17px}
+h1,h2,h3{font-family:var(--display);font-weight:650;line-height:1.15}
+h1{font-size:clamp(2.1rem,5.5vw,3.6rem)}
+h2{font-size:clamp(1.5rem,3.4vw,2.2rem);margin-bottom:.35em}
+h3{font-size:1.2rem;margin-bottom:.4em}
+p{margin-bottom:1em}
+strong{font-weight:600}
+button{font-family:var(--body);cursor:pointer}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px;border-radius:4px}
+.skiplink{position:absolute;left:-9999px;top:0;background:var(--ink);color:#fff;padding:.65rem 1.1rem;z-index:200;font-weight:600;font-size:.9rem;border-radius:0 0 10px 0;text-decoration:none}
+.skiplink:focus{left:0}
+.hsub{font-size:1.2rem;margin-bottom:.4em}
+
+/* marker highlight signature */
+.mk{background:linear-gradient(104deg, transparent 2%, var(--mark) 3%, var(--mark) 96%, transparent 98%);padding:0 .18em;border-radius:2px;font-weight:500}
+
+/* progress bar */
+#progress{position:fixed;top:0;left:0;height:5px;background:var(--teal);width:0;z-index:99;transition:width .1s linear}
+
+/* nav */
+nav{position:sticky;top:0;background:rgba(243,245,241,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:50;padding:.55rem 1rem;display:flex;gap:.4rem;overflow-x:auto;-webkit-overflow-scrolling:touch}
+nav a{white-space:nowrap;text-decoration:none;color:var(--ink-soft);font-size:.8rem;font-weight:500;padding:.35rem .7rem;border-radius:99px;border:1px solid transparent}
+nav a:hover{background:var(--card);border-color:var(--line)}
+nav a.active{background:var(--ink);color:#fff}
+
+.wrap{max-width:880px;margin:0 auto;padding:0 1.2rem}
+section{padding:3.5rem 0 1.5rem;scroll-margin-top:70px}
+.eyebrow{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--teal);margin-bottom:.6rem}
+.lo-tag{display:inline-block;font-size:.7rem;font-weight:600;letter-spacing:.08em;background:var(--ink);color:#fff;border-radius:99px;padding:.15rem .6rem;vertical-align:middle;margin-left:.5rem}
+
+/* hero */
+header.hero{padding:4.5rem 0 3rem;border-bottom:1px solid var(--line)}
+.hero .kicker{font-size:.8rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--ink-soft);margin-bottom:1rem}
+.hero p.lede{font-size:1.15rem;max-width:640px;margin-top:1.2rem;color:var(--ink-soft)}
+.hero-meta{display:flex;flex-wrap:wrap;gap:1.5rem;margin-top:1.6rem;font-size:.85rem;color:var(--ink-soft)}
+.hero-meta span b{color:var(--ink);font-weight:600}
+
+/* cards */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:1.4rem 1.5rem;margin:1.2rem 0}
+.keypoint{border-left:6px solid var(--mark);background:var(--card);border-radius:0 var(--radius) var(--radius) 0;padding:1.1rem 1.3rem;margin:1.4rem 0;box-shadow:var(--shadow)}
+.keypoint .kp-label{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+.tryit{border:2px dashed var(--teal);border-radius:var(--radius);padding:1.1rem 1.3rem;margin:1.4rem 0;background:var(--teal-soft)}
+.tryit .kp-label{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+
+/* myth cards */
+.myths{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem;margin-top:1.6rem}
+.myth{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1.1rem;box-shadow:var(--shadow)}
+.myth p.statement{font-weight:500;min-height:4.2em;margin-bottom:.8rem}
+.myth .btns{display:flex;gap:.5rem}
+.myth .btns button{flex:1;border:1.5px solid var(--ink);background:transparent;color:var(--ink);border-radius:8px;padding:.45rem;font-weight:600;font-size:.85rem;transition:all .15s}
+.myth .btns button:hover{background:var(--ink);color:#fff}
+.myth .verdict{display:none;margin-top:.8rem;font-size:.86rem;padding:.7rem .8rem;border-radius:8px}
+.myth.answered .btns{display:none}
+.myth.answered .verdict{display:block}
+.verdict.good{background:var(--teal-soft);border:1px solid var(--teal)}
+.verdict.bad{background:var(--coral-soft);border:1px solid var(--coral)}
+.verdict b.tag{display:block;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.25rem}
+
+/* pipeline infographic */
+.pipeline-fig{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1.2rem;margin:1.4rem 0;box-shadow:var(--shadow)}
+.pipeline-fig svg{width:100%;height:auto;display:block}
+.pipe-btns{display:flex;gap:.5rem;flex-wrap:wrap;margin:.9rem 0 .4rem}
+.pipe-btns button{border:1.5px solid var(--line);background:var(--paper);border-radius:99px;padding:.4rem .9rem;font-size:.83rem;font-weight:500;transition:all .15s}
+.pipe-btns button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.pipe-detail{font-size:.93rem;background:var(--paper);border-radius:10px;padding:.9rem 1rem;min-height:5.5em}
+.figcap{font-size:.78rem;color:var(--ink-soft);margin-top:.7rem}
+
+@keyframes encode{0%{transform:translate(0,0);opacity:0}5%{opacity:1}38%{transform:translate(180px,0)}52%{transform:translate(180px,0)}92%{transform:translate(465px,0);opacity:1}100%{transform:translate(465px,0);opacity:0}}
+@keyframes overflow{0%{transform:translate(0,0);opacity:0}5%{opacity:1}38%{transform:translate(180px,0)}52%{transform:translate(180px,0);opacity:1}88%{transform:translate(235px,72px);opacity:.9}100%{transform:translate(242px,82px);opacity:0}}
+.dot-encode{animation:encode 6s linear infinite both}
+.dot-overflow{animation:overflow 6s linear infinite both}
+
+/* load lab */
+.loadlab .toggles{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:.6rem;margin:1rem 0}
+.loadlab label.tg{display:flex;align-items:flex-start;gap:.6rem;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:.7rem .8rem;font-size:.88rem;cursor:pointer;transition:border-color .15s}
+.loadlab label.tg:hover{border-color:var(--ink-soft)}
+.loadlab input{accent-color:var(--teal);width:18px;height:18px;margin-top:.15rem;flex-shrink:0}
+.meter{height:38px;border-radius:10px;background:var(--paper);border:1px solid var(--line);overflow:hidden;display:flex;margin:.8rem 0 .3rem;position:relative}
+.meter .seg{height:100%;transition:width .4s ease;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:#fff;overflow:hidden;white-space:nowrap}
+.seg.intr{background:var(--ink)}
+.seg.extr{background:var(--coral-ink)}
+.seg.germ{background:var(--teal)}
+.legend{display:flex;gap:1.1rem;flex-wrap:wrap;font-size:.78rem;color:var(--ink-soft)}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:.3rem;vertical-align:-1px}
+#loadMsg{margin-top:.9rem;font-size:.92rem;padding:.8rem 1rem;border-radius:10px;background:var(--paper)}
+#loadMsg.over{background:var(--coral-soft);border:1px solid var(--coral);font-weight:500}
+#loadMsg.ideal{background:var(--teal-soft);border:1px solid var(--teal)}
+
+/* theory tabs */
+.tabs{display:flex;gap:.4rem;flex-wrap:wrap;margin:1.2rem 0 0}
+.tabs button{border:1.5px solid var(--line);background:var(--card);border-radius:12px 12px 0 0;padding:.6rem 1.1rem;font-weight:600;font-size:.9rem;border-bottom:none;color:var(--ink-soft)}
+.tabs button[aria-selected="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.tabpanel{background:var(--card);border:1px solid var(--line);border-radius:0 var(--radius) var(--radius) var(--radius);padding:1.4rem 1.5rem;box-shadow:var(--shadow)}
+.tabpanel ul{margin:.4rem 0 1em 1.2rem}
+.tabpanel li{margin-bottom:.3em}
+.pill-row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin:.6rem 0 1rem}
+.pill-label{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-right:.2rem}
+.pill{font-size:.75rem;font-weight:600;background:var(--paper);border:1px solid var(--line);border-radius:99px;padding:.25rem .7rem}
+.pill i{font-style:normal;font-weight:400;color:var(--ink-soft)}
+
+/* comparison table */
+.tbl{width:100%;border-collapse:collapse;font-size:.87rem;margin:1rem 0;background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+.tbl th,.tbl td{border:1px solid var(--line);padding:.6rem .7rem;text-align:left;vertical-align:top}
+.tbl thead th{background:var(--ink);color:#fff;font-weight:600;border-color:var(--ink-soft)}
+.tbl tbody th{background:var(--paper);font-weight:600;width:16%}
+.tbl-scroll{overflow-x:auto;margin:1rem 0}
+
+/* matching */
+.match-item{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1rem 1.1rem;margin:.7rem 0;box-shadow:var(--shadow)}
+.match-item p{font-size:.93rem;font-weight:400;margin-bottom:.7rem}
+.match-item .choices{display:flex;gap:.5rem;flex-wrap:wrap}
+.match-item .choices button{border:1.5px solid var(--ink);background:transparent;border-radius:99px;padding:.35rem .85rem;font-size:.8rem;font-weight:600;color:var(--ink);transition:all .15s}
+.match-item .choices button:hover:not(:disabled){background:var(--ink);color:#fff}
+.match-item .choices button.right{background:var(--teal);border-color:var(--teal);color:#fff}
+.match-item .choices button.wrong{background:var(--coral-ink);border-color:var(--coral-ink);color:#fff}
+.match-item .why{display:none;font-size:.85rem;margin-top:.7rem;background:var(--teal-soft);border-radius:8px;padding:.6rem .8rem}
+.match-item.done .why{display:block}
+
+/* flip cards: grid-stacked faces so the card always sizes to its tallest face */
+.flips{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin:1.4rem 0}
+.flip{perspective:1000px;position:relative}
+.flip-inner{display:grid;width:100%;transition:transform .55s;transform-style:preserve-3d}
+.flip.flipped .flip-inner{transform:rotateY(180deg)}
+.flip-face{grid-area:1/1;min-height:280px;backface-visibility:hidden;border-radius:var(--radius);padding:1.2rem;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+.flip-front{background:var(--ink);color:#fff}
+.flip-front .num{font-family:var(--display);font-size:2rem;color:var(--mark)}
+.flip-front h3{color:#fff;margin-top:auto}
+.flip-front p{font-size:.85rem;color:#C9D2E6;margin:0}
+.flip-front .hint{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mark);margin-top:.9rem;font-weight:600}
+.flip-back{background:var(--card);border:1px solid var(--line);transform:rotateY(180deg);font-size:.82rem;overflow:auto}
+.flip-back h4{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:.5rem}
+.flip-back ul{margin-left:1rem}
+.flip-back li{margin-bottom:.35rem}
+.flip button.flipbtn{position:absolute;inset:0;width:100%;height:100%;background:transparent;border:none;z-index:2;border-radius:var(--radius)}
+
+/* curve toggle */
+.curve-btns{display:flex;gap:.5rem;margin:.9rem 0}
+.curve-btns button{border:1.5px solid var(--line);background:var(--paper);border-radius:99px;padding:.45rem 1rem;font-size:.85rem;font-weight:600}
+.curve-btns button[aria-pressed="true"]{background:var(--teal);color:#fff;border-color:var(--teal)}
+.curve path.trace{transition:opacity .4s}
+
+/* wizard / diagnosis activity */
+.wizard .step{margin:1rem 0}
+.wizard .step h4{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:.5rem}
+.wizard .opts{display:flex;gap:.5rem;flex-wrap:wrap}
+.wizard .opts button{border:1.5px solid var(--line);background:var(--paper);border-radius:10px;padding:.6rem .9rem;font-size:.86rem;font-weight:500;transition:all .15s}
+.wizard .opts button:hover:not(:disabled){border-color:var(--ink)}
+.wizard .opts button.right{background:var(--teal);color:#fff;border-color:var(--teal)}
+.wizard .opts button.wrong{background:var(--coral-soft);border-color:var(--coral);color:var(--coral-ink)}
+.dg-count{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+.dg-brief{background:var(--paper);border-left:4px solid var(--ink);padding:.85rem 1rem;border-radius:0 10px 10px 0;font-size:.95rem;margin:.7rem 0 .3rem}
+.dg-fb{display:none;font-size:.86rem;margin-top:.6rem;padding:.6rem .8rem;border-radius:8px}
+.dg-fb.good{display:block;background:var(--teal-soft);border:1px solid var(--teal)}
+.dg-fb.bad{display:block;background:var(--coral-soft);border:1px solid var(--coral)}
+#dgResult{margin-top:1.2rem;background:var(--teal-soft);border:1px solid var(--teal);border-radius:var(--radius);padding:1.1rem 1.2rem;font-size:.94rem}
+#dgResult h4{font-family:var(--display);font-size:1.05rem;margin-bottom:.4rem}
+.dg-nav{margin-top:1rem;text-align:right}
+.dg-nav button{background:var(--ink);color:#fff;border:none;border-radius:99px;padding:.6rem 1.4rem;font-weight:600;font-size:.9rem}
+details.scenario{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.2rem;margin:1.2rem 0;box-shadow:var(--shadow)}
+details.scenario summary{font-weight:600;cursor:pointer}
+details.scenario[open] summary{margin-bottom:.7rem}
+
+/* quiz */
+.quiz-progress{font-size:.8rem;font-weight:600;color:var(--ink-soft);letter-spacing:.06em;margin-bottom:.6rem}
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1.4rem 1.5rem;box-shadow:var(--shadow)}
+.qcard .qtext{font-weight:500;font-size:1.02rem;margin-bottom:1rem}
+.qopt{display:block;width:100%;text-align:left;border:1.5px solid var(--line);background:var(--paper);border-radius:10px;padding:.75rem .9rem;margin:.5rem 0;font-size:.92rem;transition:all .15s}
+.qopt:hover:not(:disabled){border-color:var(--ink)}
+.qopt.right{background:var(--teal-soft);border-color:var(--teal)}
+.qopt.wrong{background:var(--coral-soft);border-color:var(--coral)}
+.qrationale{display:none;margin-top:.9rem;font-size:.88rem;background:var(--paper);border-radius:10px;padding:.8rem 1rem}
+.qnav{display:flex;justify-content:space-between;align-items:center;margin-top:1rem}
+.qnav button{background:var(--ink);color:#fff;border:none;border-radius:99px;padding:.6rem 1.4rem;font-weight:600;font-size:.9rem}
+.qnav button:disabled{opacity:.35;cursor:default}
+#quizScore{text-align:center;padding:1rem 0}
+#quizScore .big{font-family:var(--display);font-size:3rem;color:var(--teal)}
+
+/* accordions + footer */
+details.plain{border-bottom:1px solid var(--line);padding:.8rem 0}
+details.plain summary{font-weight:600;cursor:pointer;font-size:.95rem}
+details.plain p, details.plain ul{font-size:.9rem;margin-top:.5rem}
+details.plain ul{margin-left:1.2rem}
+footer{border-top:1px solid var(--line);margin-top:3rem;padding:2.5rem 0;font-size:.85rem;color:var(--ink-soft)}
+footer a{color:var(--teal);overflow-wrap:anywhere}
+footer ul{margin-left:1.2rem}
+.section-rule{border:none;border-top:1px solid var(--line);margin:2.5rem 0 0}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  .dot-encode,.dot-overflow{display:none}
+}
+@media (max-width:560px){
+  body{font-size:16px}
+  .card,.tabpanel,.qcard{padding:1.1rem}
+}
+</style>
+</head>
+<body>
+<a class="skiplink" href="#content">Skip to lesson content</a>
+<div id="progress" role="presentation"></div>
+
+<nav aria-label="Lesson sections">
+  <a href="#s1">1 · Why it matters</a>
+  <a href="#s2">2 · The brain</a>
+  <a href="#s3">3 · Three theories</a>
+  <a href="#s4">4 · Strategies</a>
+  <a href="#s5">5 · Choosing</a>
+  <a href="#s6">6 · Quiz</a>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">An interactive lesson for EdTech professionals</p>
+    <h1>Learning Science <em>and</em> Theory</h1>
+    <p class="lede">Every design decision you make either works <span class="mk">with the way the brain learns</span> or against it. This lesson shows you the science behind those decisions, and how to turn it into practical design choices.</p>
+    <div class="hero-meta">
+      <span><b>45 to 60 min</b> · self-paced</span>
+      <span><b>4 objectives</b> · Bloom's aligned</span>
+      <span><b>No prerequisites</b></span>
+    </div>
+    <details class="plain" style="margin-top:1rem;max-width:640px">
+      <summary>What you will be able to do</summary>
+      <ul>
+        <li><strong>Explain</strong> how memory, attention, and cognitive load shape learning (LO1)</li>
+        <li><strong>Compare</strong> behaviorism, cognitivism, and constructivism as explanations of how learning happens (LO2)</li>
+        <li><strong>Identify</strong> evidence-based strategies (retrieval, spacing, interleaving, feedback) in course designs (LO3)</li>
+        <li><strong>Select</strong> a theory-informed design approach for a given learning scenario (LO4)</li>
+      </ul>
+    </details>
+
+    <div style="margin-top:2.4rem">
+      <h2 class="hsub">Before we start, test your instincts</h2>
+      <p style="font-size:.92rem;color:var(--ink-soft)">Your instincts about learning will mislead you. Tap Myth or Fact on each card and see how yours hold up.</p>
+      <div class="myths" id="myths"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="content">
+
+<!-- SECTION 1 -->
+<section id="s1">
+  <p class="eyebrow">Section 1</p>
+  <h2>Why Learning Science Matters</h2>
+
+  <p>Picture two versions of the same compliance course. Version A presents all the content, then ends with a quiz. Version B mixes short practice questions into the content, spreads key ideas across the course, and asks learners to recall information before re-teaching it. Same content in both. Six weeks later, the Version B learners remember far more.</p>
+  <p>That gap is not luck. It is <span class="mk">learning science</span> at work: the study of how people learn, built from cognitive psychology, neuroscience, and education research. And you just felt why you need it. If any of the myth cards above surprised you, your instincts and the evidence disagree.</p>
+
+  <div class="keypoint"><span class="kp-label">Key point</span>
+    <p style="margin:0.3rem 0 0">Learning science lets you decide with evidence instead of instinct. When the two disagree, go with the evidence.</p>
+  </div>
+
+  <h3>What "learning" actually is</h3>
+  <p>Before you can design for learning, you need a working definition. Here is the one this lesson uses: <span class="mk">a relatively permanent change in knowledge or behavior that results from experience</span>. Two words in that sentence carry most of the weight.</p>
+  <p><strong>Permanent.</strong> If a learner passes the quiz today but cannot apply the skill next month, durable learning never happened. You measured a moment, not a change.</p>
+  <p><strong>Change.</strong> Learning has to show up somewhere you can see it, in what a person knows or does. That is why measurable learning objectives sit at the center of instructional design. No visible change, no evidence of learning.</p>
+  <hr class="section-rule">
+</section>
+
+<!-- SECTION 2 -->
+<section id="s2">
+  <p class="eyebrow">Section 2 <span class="lo-tag">LO1 · Understand</span></p>
+  <h2>How the Brain Learns</h2>
+  <p>You now have a definition of learning. The next question is what has to happen inside a learner's head for that change to stick, and where the process breaks down.</p>
+
+  <h3>The memory model every designer should know</h3>
+  <p>Think of memory as three stores in a row. <strong>Tap each store</strong> in the diagram to see what it does to your designs.</p>
+
+  <div class="pipeline-fig">
+    <svg viewBox="0 0 720 240" role="img" aria-label="Infographic of the three-store memory model. A green ball and a red ball travel side by side from sensory memory into working memory and pause together at the bottleneck. Their fates then split: the green ball crosses the encoding arrow into long-term memory while the red ball falls out of the pipeline as lost overflow.">
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#22304F"/></marker>
+      </defs>
+      <!-- flow line -->
+      <line x1="150" y1="105" x2="240" y2="105" stroke="#22304F" stroke-width="2.5" marker-end="url(#arr)"/>
+      <line x1="440" y1="105" x2="530" y2="105" stroke="#22304F" stroke-width="2.5" marker-end="url(#arr)"/>
+      <!-- animated dots: green encodes all the way, red overflows and is lost -->
+      <!-- animated dots travel together in parallel lanes; fates split at the bottleneck -->
+      <g class="dot-encode"><circle cx="155" cy="99" r="5" fill="#0E6B67"/></g>
+      <g class="dot-overflow"><circle cx="155" cy="111" r="5" fill="#E4572E"/></g>
+      <!-- sensory -->
+      <g id="pipeS" style="cursor:pointer">
+        <rect x="20" y="55" width="130" height="100" rx="14" fill="#F3F5F1" stroke="#22304F" stroke-width="2.5"/>
+        <text x="85" y="98" text-anchor="middle" font-size="15" font-weight="600" fill="#22304F" font-family="Lexend, sans-serif">Sensory</text>
+        <text x="85" y="118" text-anchor="middle" font-size="15" font-weight="600" fill="#22304F" font-family="Lexend, sans-serif">memory</text>
+        <text x="85" y="140" text-anchor="middle" font-size="11" fill="#4A5878" font-family="Lexend, sans-serif">0.5 to 3 seconds</text>
+      </g>
+      <!-- working (narrow = bottleneck) -->
+      <g id="pipeW" style="cursor:pointer">
+        <rect x="245" y="72" width="190" height="66" rx="12" fill="#FFD455" stroke="#22304F" stroke-width="2.5"/>
+        <text x="340" y="99" text-anchor="middle" font-size="15" font-weight="600" fill="#22304F" font-family="Lexend, sans-serif">Working memory</text>
+        <text x="340" y="120" text-anchor="middle" font-size="11" fill="#4A5878" font-family="Lexend, sans-serif">about 4 chunks · under 30 s</text>
+        <text x="340" y="58" text-anchor="middle" font-size="11" font-weight="600" fill="#B23F1B" font-family="Lexend, sans-serif">the bottleneck</text>
+      </g>
+      <!-- lost -->
+      <text x="392" y="182" text-anchor="middle" font-size="11" fill="#B23F1B" font-family="Lexend, sans-serif">overflow is lost</text>
+      <!-- long term -->
+      <g id="pipeL" style="cursor:pointer">
+        <rect x="535" y="35" width="165" height="140" rx="14" fill="#0E6B67" stroke="#22304F" stroke-width="2.5"/>
+        <text x="617" y="92" text-anchor="middle" font-size="15" font-weight="600" fill="#fff" font-family="Lexend, sans-serif">Long-term</text>
+        <text x="617" y="112" text-anchor="middle" font-size="15" font-weight="600" fill="#fff" font-family="Lexend, sans-serif">memory</text>
+        <text x="617" y="136" text-anchor="middle" font-size="11" fill="#DCEBEA" font-family="Lexend, sans-serif">no practical limit</text>
+      </g>
+      <text x="195" y="90" text-anchor="middle" font-size="10.5" fill="#4A5878" font-family="Lexend, sans-serif">attention</text>
+      <text x="485" y="90" text-anchor="middle" font-size="10.5" fill="#4A5878" font-family="Lexend, sans-serif">encoding</text>
+    </svg>
+    <div class="pipe-btns" role="group" aria-label="Memory stores">
+      <button data-pipe="s" aria-pressed="true">Sensory memory</button>
+      <button data-pipe="w" aria-pressed="false">Working memory</button>
+      <button data-pipe="l" aria-pressed="false">Long-term memory</button>
+    </div>
+    <div class="pipe-detail" id="pipeDetail" aria-live="polite"></div>
+    <p class="figcap">Fig. 1 · The three-store (modal) model of memory, after Atkinson and Shiffrin (1968). Every piece of learning has to squeeze through the working memory bottleneck.</p>
+  </div>
+
+  <div class="card">
+    <h3 style="font-size:1.05rem">Example: the 30-step demo</h3>
+    <p style="font-size:.95rem;margin:0">A learner watches a 12-minute software demo containing 30 distinct steps. Working memory cannot hold 30 new steps. Most are gone before they can be encoded. Now redesign it: three 4-minute segments, each organized around one meaningful task, each followed by hands-on practice. Each segment now fits inside working memory, and the practice does the encoding.</p>
+  </div>
+
+  <h3>Cognitive Load Theory: run the lab</h3>
+  <p>If working memory is the bottleneck, the obvious next question is what fills it up. <span class="mk">Cognitive Load Theory</span>, developed by John Sweller, gives you three answers. <strong>Intrinsic load</strong> comes from the complexity of the material itself. <strong>Extraneous load</strong> is effort wasted on things that teach nothing. <strong>Germane load</strong> is the productive effort of building schemas.</p>
+  <p>Reading about load is one thing. Watch it happen. Below is a working memory meter for a lesson on a genuinely complex topic. Toggle the design decisions and see what fills the learner's head.</p>
+
+  <div class="card loadlab">
+    <div class="toggles">
+      <label class="tg"><input type="checkbox" id="tgText"> <span><strong>On-screen text duplicates the narration</strong><br>Word for word, both channels at once</span></label>
+      <label class="tg"><input type="checkbox" id="tgMusic"> <span><strong>Looping background music</strong><br>It sets the mood, the stakeholder says</span></label>
+      <label class="tg"><input type="checkbox" id="tgAnim"> <span><strong>Decorative animations</strong><br>Nice to look at. Teach nothing.</span></label>
+      <label class="tg"><input type="checkbox" id="tgChunk"> <span><strong>Chunk into short segments</strong><br>Sequence the complexity</span></label>
+      <label class="tg"><input type="checkbox" id="tgWorked"> <span><strong>Add a worked example + practice</strong><br>Productive schema-building effort</span></label>
+    </div>
+    <div class="meter" role="img" aria-label="Working memory capacity meter" id="meter">
+      <div class="seg intr" id="segI"></div>
+      <div class="seg extr" id="segE"></div>
+      <div class="seg germ" id="segG"></div>
+    </div>
+    <div class="legend">
+      <span><i style="background:var(--ink)"></i>Intrinsic (manage it)</span>
+      <span><i style="background:var(--coral-ink)"></i>Extraneous (cut it)</span>
+      <span><i style="background:var(--teal)"></i>Germane (feed it)</span>
+      <span style="margin-left:auto">Capacity = 100%</span>
+    </div>
+    <div id="loadMsg" aria-live="polite"></div>
+    <p class="figcap">The percentages are a teaching model, not measured units: cognitive load is a construct, not a gauge. And a note for the theory-minded: current CLT treats germane load as working-memory resources devoted to the intrinsic load of the task rather than a third additive load (Sweller, 2010). The design implication is unchanged. Manage, cut, feed.</p>
+  </div>
+
+  <div class="keypoint"><span class="kp-label">Key point</span>
+    <p style="margin:.3rem 0 0">Manage intrinsic load. Cut extraneous load. Feed germane load. That is the designer's core cognitive job in one line.</p>
+  </div>
+
+  <div class="tryit"><span class="kp-label">Apply it in your own work</span>
+    <p style="margin:.3rem 0 0">Open a course or tutorial you worked on recently. Find one element that adds extraneous load, something learners must process that contributes nothing to the objective. What would you cut or simplify? Name the load category your fix addresses.</p>
+  </div>
+  <hr class="section-rule">
+</section>
+
+<!-- SECTION 3 -->
+<section id="s3">
+  <p class="eyebrow">Section 3 <span class="lo-tag">LO2 · Analyze</span></p>
+  <h2>The Big Three Learning Theories</h2>
+  <p>You can now describe the machinery of memory. But machinery alone does not tell you what learning <em>is</em> or how to cause it. That is the job of learning theories. Three of them have shaped nearly every learning product you have ever used, and none of them is simply "correct." Each explains part of the picture. Expert designers move among them on purpose.</p>
+
+  <div class="tabs" role="tablist" aria-label="Learning theories">
+    <button role="tab" id="tabB" aria-selected="true" aria-controls="panB">Behaviorism</button>
+    <button role="tab" id="tabC" aria-selected="false" aria-controls="panC">Cognitivism</button>
+    <button role="tab" id="tabK" aria-selected="false" aria-controls="panK">Constructivism</button>
+  </div>
+
+  <div class="tabpanel" id="panB" role="tabpanel" aria-labelledby="tabB">
+    <h3>Learning as observable behavior change</h3>
+    <p><strong>Core idea:</strong> Learning is a change in observable behavior, shaped by stimulus, response, and consequence. Reinforcement strengthens behavior. What happens inside the mind stays a black box.</p>
+    <div class="pill-row"><span class="pill-label">Key figures</span><span class="pill">Pavlov <i>· classical conditioning</i></span><span class="pill">Skinner <i>· operant conditioning</i></span><span class="pill">Thorndike <i>· law of effect</i></span></div>
+    <p><strong>What it looks like in EdTech:</strong></p>
+    <ul>
+      <li>Immediate feedback on quiz answers</li>
+      <li>Points, badges, streaks, and other gamification mechanics</li>
+      <li>Drill-and-practice apps such as flashcards and typing tutors</li>
+      <li>Mastery gates: demonstrate the behavior before advancing</li>
+    </ul>
+    <p><strong>Best suited for:</strong> procedural skills, fluency building, compliance behaviors, habit formation.</p>
+    <p style="margin:0"><strong>Limitation:</strong> It explains what learners do, not how they think. Ask it to handle complex reasoning or transfer and it goes quiet.</p>
+  </div>
+
+  <div class="tabpanel" id="panC" role="tabpanel" aria-labelledby="tabC" hidden>
+    <h3>Learning as information processing</h3>
+    <p>Behaviorism refused to look inside the head. Cognitivism opened the box.</p>
+    <p><strong>Core idea:</strong> The mind is an active information-processing system. Learning means taking in information, organizing it, connecting it to prior knowledge, and storing it in long-term memory. Everything in Section 2 is cognitivist science.</p>
+    <div class="pill-row"><span class="pill-label">Key figures</span><span class="pill">Atkinson &amp; Shiffrin <i>· modal model</i></span><span class="pill">Miller <i>· memory span</i></span><span class="pill">Sweller <i>· cognitive load</i></span><span class="pill">Mayer <i>· multimedia learning</i></span></div>
+    <p><strong>What it looks like in EdTech:</strong></p>
+    <ul>
+      <li>Chunked microlearning sized to working memory limits</li>
+      <li>Advance organizers, concept maps, clear content hierarchies</li>
+      <li>Worked examples that fade into independent practice</li>
+      <li>Multimedia pairing narration with relevant visuals (Mayer's principles)</li>
+    </ul>
+    <p><strong>Best suited for:</strong> conceptual knowledge, structured skill-building, any content where complexity is the enemy.</p>
+    <p style="margin:0"><strong>Limitation:</strong> It can treat learning as a solo, context-free process, and quietly ignore motivation, social interaction, and authentic application.</p>
+  </div>
+
+  <div class="tabpanel" id="panK" role="tabpanel" aria-labelledby="tabK" hidden>
+    <h3>Learning as meaning-making</h3>
+    <p>Cognitivism explains how information gets stored. It says less about where understanding comes from. Constructivism picks up that thread.</p>
+    <p><strong>Core idea:</strong> Learners do not receive knowledge. They build it, by connecting new experiences to what they already know. Social constructivism (Vygotsky) adds that this building happens through interaction with others, and that instruction works best when aimed at the <span class="mk">Zone of Proximal Development</span>: the space between what a learner can do alone and what they can do with support. That support has a name you already use, coined by Wood, Bruner, and Ross in 1976. Scaffolding.</p>
+    <div class="pill-row"><span class="pill-label">Key figures</span><span class="pill">Piaget <i>· cognitive constructivism</i></span><span class="pill">Vygotsky <i>· social constructivism, ZPD</i></span><span class="pill">Bruner <i>· discovery learning, scaffolding</i></span><span class="pill">Dewey <i>· learning by doing</i></span></div>
+    <p><strong>What it looks like in EdTech:</strong></p>
+    <ul>
+      <li>Scenario-based and problem-based learning</li>
+      <li>Simulations, virtual labs, project-based capstones</li>
+      <li>Discussion forums, peer review, cohort-based courses</li>
+      <li>Scaffolds (hints, templates, coaching) that fade as competence grows</li>
+    </ul>
+    <p><strong>Best suited for:</strong> complex judgment, messy ill-structured problems, transfer to the real world.</p>
+    <p style="margin:0"><strong>Limitation:</strong> Pure discovery learning can overwhelm a novice. When learners have no prior knowledge to build on, unguided construction is slow and painful.</p>
+  </div>
+
+  <h3 style="margin-top:2rem">Side by side</h3>
+  <div class="tbl-scroll">
+  <table class="tbl">
+    <thead><tr><th scope="col"></th><th scope="col">Behaviorism</th><th scope="col">Cognitivism</th><th scope="col">Constructivism</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Learning is...</th><td>A change in behavior</td><td>Information processing and storage</td><td>Active meaning-making</td></tr>
+      <tr><th scope="row">Learner's role</th><td>Responds to stimuli</td><td>Processes and organizes input</td><td>Constructs understanding</td></tr>
+      <tr><th scope="row">Designer's role</th><td>Shape behavior with practice and reinforcement</td><td>Structure content for the brain's limits</td><td>Create rich experiences with scaffolding</td></tr>
+      <tr><th scope="row">Feedback style</th><td>Immediate right/wrong plus reinforcement</td><td>Explanatory, schema-correcting</td><td>Reflective, coaching-oriented</td></tr>
+      <tr><th scope="row">Watch out for</th><td>Ignores thinking</td><td>Ignores context</td><td>Overwhelms novices</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="keypoint"><span class="kp-label">Key point</span>
+    <p style="margin:.3rem 0 0">Pick the theory that fits the learning problem, not the one that is fashionable. Fluency drills call for behaviorist design. Complex judgment calls for constructivist design. Both lean on cognitivist principles to avoid overload.</p>
+  </div>
+
+  <div class="tryit"><span class="kp-label">Apply it · match the feature to the theory</span>
+    <p style="margin:.3rem 0 0">A language-learning app gives users the features below. For each one, pick the theory it draws from. Every match comes with instant feedback and the reasoning behind it.</p>
+  </div>
+  <div id="matchZone"></div>
+  <hr class="section-rule">
+</section>
+
+<!-- SECTION 4 -->
+<section id="s4">
+  <p class="eyebrow">Section 4 <span class="lo-tag">LO3 · Apply</span></p>
+  <h2>From Theory to Practice: Evidence-Based Strategies</h2>
+  <p>Theories tell you how learning works. They do not hand you a build spec. For that, turn to the strategies that decades of research keep confirming. Four of them belong in every designer's toolkit. <strong>Flip each card</strong> to see how it shows up in real course design.</p>
+
+  <div class="flips" id="flips"></div>
+
+  <h3>See spacing work</h3>
+  <p>The same amount of study spread across days beats one long session, and the reason surprises people: the small amount of forgetting between sessions is the point. Retrieving something you have partly forgotten is exactly the effort that makes memory stick. Toggle the two study plans below and watch what each one leaves behind after a month.</p>
+
+  <div class="card">
+    <div class="curve-btns" role="group" aria-label="Study plan">
+      <button id="btnMassed" aria-pressed="true">One long session</button>
+      <button id="btnSpaced" aria-pressed="false">Spaced with reviews</button>
+    </div>
+    <svg class="curve" viewBox="0 0 640 270" role="img" aria-label="Line chart of memory retention over 30 days. A single massed study session decays to low retention. Spaced practice with three short reviews recovers retention each time and ends much higher." style="width:100%;height:auto">
+      <line x1="55" y1="20" x2="55" y2="225" stroke="#DDE2DA" stroke-width="1.5"/>
+      <line x1="55" y1="225" x2="615" y2="225" stroke="#DDE2DA" stroke-width="1.5"/>
+      <text x="20" y="45" font-size="11" fill="#4A5878" font-family="Lexend, sans-serif">100%</text>
+      <text x="30" y="228" font-size="11" fill="#4A5878" font-family="Lexend, sans-serif">0%</text>
+      <text x="55" y="248" font-size="11" fill="#4A5878" font-family="Lexend, sans-serif">Day 0</text>
+      <text x="580" y="248" font-size="11" fill="#4A5878" font-family="Lexend, sans-serif">Day 30</text>
+      <text x="14" y="140" font-size="11" fill="#4A5878" font-family="Lexend, sans-serif" transform="rotate(-90 14 140)">Retention</text>
+      <!-- massed -->
+      <path id="curveMassed" class="trace" d="M55,40 C130,120 230,180 380,198 C470,207 550,210 615,212" fill="none" stroke="#E4572E" stroke-width="3.5" stroke-linecap="round"/>
+      <!-- spaced -->
+      <g id="curveSpaced" class="trace" style="opacity:0">
+        <path d="M55,40 C90,80 110,100 130,112 L130,50 C170,90 190,105 210,115 L210,55 C260,90 285,100 310,108 L310,60 C400,85 510,95 615,100" fill="none" stroke="#0E6B67" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="130" cy="50" r="5" fill="#0E6B67"/><circle cx="210" cy="55" r="5" fill="#0E6B67"/><circle cx="310" cy="60" r="5" fill="#0E6B67"/>
+        <text x="130" y="38" text-anchor="middle" font-size="10.5" fill="#0E6B67" font-family="Lexend, sans-serif" font-weight="600">review 1</text>
+        <text x="210" y="43" text-anchor="middle" font-size="10.5" fill="#0E6B67" font-family="Lexend, sans-serif" font-weight="600">review 2</text>
+        <text x="310" y="48" text-anchor="middle" font-size="10.5" fill="#0E6B67" font-family="Lexend, sans-serif" font-weight="600">review 3</text>
+      </g>
+      <text id="curveLabel" x="615" y="205" text-anchor="end" font-size="12" font-weight="600" fill="#B23F1B" font-family="Lexend, sans-serif">most of it is gone</text>
+    </svg>
+    <p class="figcap">Fig. 2 · Schematic forgetting curves in the tradition of Ebbinghaus (1885). The shapes are illustrative, not plotted data. Each review interrupts forgetting, and the decay after each retrieval gets shallower.</p>
+  </div>
+
+  <div class="keypoint"><span class="kp-label">Key point</span>
+    <p style="margin:.3rem 0 0">Notice what these four strategies share. Each one feels harder to learners in the moment. Robert Bjork named these <span class="mk">desirable difficulties</span>. Design for durable learning, not for the illusion of ease.</p>
+  </div>
+
+  <div class="tryit"><span class="kp-label">Apply it in your own work</span>
+    <p style="margin:.3rem 0 0">Audit one assessment you have built against all four strategies. Does the course test before the end? Do concepts come back over time? Are question types mixed? Does every option carry a rationale? Pick the single change with the highest impact.</p>
+  </div>
+  <hr class="section-rule">
+</section>
+
+<!-- SECTION 5 -->
+<section id="s5">
+  <p class="eyebrow">Section 5 <span class="lo-tag">LO4 · Apply</span></p>
+  <h2>Choosing Your Approach: Theory in Action</h2>
+  <p>You now hold theories in one hand and strategies in the other. The last skill is choosing, and there is no universal best method. Expert designers diagnose the learning problem first and select the approach second. So practice the diagnosis. Below are three client briefs. For each one, name the outcome type, then name the learners. Get both right and the design direction follows.</p>
+
+  <div class="card wizard" id="diagnose">
+    <span class="dg-count" id="dgCount">Brief 1 of 3</span>
+    <p class="dg-brief" id="dgBrief"></p>
+    <div class="step" id="dgStepA">
+      <h4>Step 1 · Diagnose the outcome</h4>
+      <div class="opts" id="dgOptsA"></div>
+      <div class="dg-fb" id="dgFbA" aria-live="polite"></div>
+    </div>
+    <div class="step" id="dgStepB" hidden>
+      <h4>Step 2 · Diagnose the learners</h4>
+      <div class="opts" id="dgOptsB"></div>
+      <div class="dg-fb" id="dgFbB" aria-live="polite"></div>
+    </div>
+    <div id="dgResult" hidden aria-live="polite"></div>
+    <div class="dg-nav"><button id="dgNext" hidden>Next brief</button></div>
+  </div>
+
+  <p>Whichever brief you just diagnosed, step 3 never changes: <strong>layer on the evidence-based strategies.</strong> Retrieval, spacing, interleaving, and quality feedback apply to every approach.</p>
+
+  <details class="scenario">
+    <summary>Worked scenario: the hospital brief, diagnosed step by step</summary>
+    <p><strong>Brief:</strong> A hospital needs nurses to master a new medication-verification procedure. Errors are dangerous. The steps are fixed. The nurses range from new graduates to 20-year veterans.</p>
+    <p><strong>Diagnosis:</strong> Walk the lens. The outcome is procedural accuracy under pressure, so the backbone is behaviorist: repeated practice to mastery with immediate corrective feedback. Intrinsic load will overwhelm the new graduates, so add cognitivist supports: chunk the procedure and open with a worked-example demonstration. The skill has to survive a chaotic real ward, so close with a constructivist capstone: a simulated shift with distractions, followed by a debrief. Retention has to last months, so schedule booster simulations at two and six weeks.</p>
+    <p style="margin:0">One design, three theories, each doing the job it does best.</p>
+  </details>
+
+  <div class="tryit"><span class="kp-label">Apply it · your turn to diagnose</span>
+    <p style="margin:.3rem 0 0">A client asks for "a one-hour video course" to train customer-support reps to handle angry customers. Run the three-step lens: diagnose the outcome type, the likely learner range, and sketch a design that beats the one-hour video. Name the theory behind each design choice.</p>
+  </div>
+  <hr class="section-rule">
+</section>
+
+<!-- SECTION 6 -->
+<section id="s6">
+  <p class="eyebrow">Section 6 · Knowledge check</p>
+  <h2>Prove It to Yourself</h2>
+  <p>You just read that retrieval is an act of learning, not just a measurement of it. So retrieve. Six questions, one per objective family, with a rationale for every option. Wrong answers teach here.</p>
+
+  <div class="quiz-progress" id="quizProg"></div>
+  <div class="qcard" id="quizCard"></div>
+  <hr class="section-rule">
+
+  <h2 style="margin-top:2.5rem">Summary</h2>
+  <p>In this lesson, you defined learning as a relatively permanent change in knowledge or behavior, and traced the path that change must travel: through a severely limited working memory into long-term memory. Cognitive Load Theory gave you three levers to pull along that path. Manage intrinsic load, cut extraneous load, feed germane load. You compared the three major learning theories and saw that behaviorism, cognitivism, and constructivism each fit different learning problems rather than competing for a single crown. You then connected theory to four evidence-based strategies and practiced a three-step decision lens for matching theory-informed designs to real scenarios.</p>
+  <p>From here, every design review you sit in is a chance to ask the same quiet question: <span class="mk">is this decision working with the brain, or against it?</span></p>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <h2 class="hsub" style="margin-bottom:.8rem">Designer's notes and sources</h2>
+    <details class="plain"><summary>Delivery and adaptation guide</summary>
+      <ul>
+        <li><strong>Modularity:</strong> Sections 2 through 5 stand alone as 10-to-15-minute microlessons for drip delivery, which is itself spaced practice in action.</li>
+        <li><strong>Practice the message:</strong> This lesson models its own principles: chunked sections, retrieval before summaries, cumulative checks, rationale-rich feedback. Point that out to learners. Meta-awareness aids transfer.</li>
+        <li><strong>Live delivery:</strong> Convert the Apply It prompts into breakout activities. Use the hospital scenario as a small-group case before revealing the model answer.</li>
+        <li><strong>Extension topics:</strong> andragogy (Knowles), motivation (self-determination theory, ARCS), Mayer's multimedia principles (15 in the current edition), connectivism and social learning in the age of AI, and measurement (Kirkpatrick, learning analytics).</li>
+      </ul>
+    </details>
+    <details class="plain"><summary>References (APA 7th ed.)</summary>
+      <ul style="list-style:none;margin-left:0">
+        <li style="padding-left:2rem;text-indent:-2rem;margin-bottom:.5rem">Atkinson, R. C., &amp; Shiffrin, R. M. (1968). Human memory: A proposed system and its control processes. In K. W. Spence &amp; J. T. Spence (Eds.), <em>The psychology of learning and motivation</em> (Vol. 2, pp. 89–195). Academic Press. <a href="https://doi.org/10.1016/S0079-7421(08)60422-3">https://doi.org/10.1016/S0079-7421(08)60422-3</a></li>
+        <li style="padding-left:2rem;text-indent:-2rem;margin-bottom:.5rem">Bjork, R. A. (1994). Memory and metamemory considerations in the training of human beings. In J. Metcalfe &amp; A. P. Shimamura (Eds.), <em>Metacognition: Knowing about knowing</em> (pp. 185–205). MIT Press.</li>
+        <li style="padding-left:2rem;text-indent:-2rem;margin-bottom:.5rem">Brown, P. C., Roediger, H. L., III, &amp; McDaniel, M. A. (2014). <em>Make it stick: The science of successful learning</em>. Belknap Press of Harvard University Press.</li>
+        <li style="padding-left:2rem;text-indent:-2rem;margin-bottom:.5rem">Cowan, N. (2001). The magical number 4 in short-term memory: A reconsideration of mental storage capacity. <em>Behavioral and Brain Sciences, 24</em>(1), 87–114. <a href="https://doi.org/10.1017/S0140525X01003922">https://doi.org/10.1017/S0140525X01003922</a></li>
+        <li style="padding-left:2rem;text-indent:-2rem;margin-bottom:.5rem">Dunlosky, J., Rawson, K. A., Marsh, E. J., Nathan, M. J., &amp; Willingham, D. T. (2013). Improving students' learning with effective learning techniques: Promising directions from cognitive and educational psychology. <em>Psychological Science in the Public Interest, 14</em>(1), 4–58. <a href="https://doi.org/10.1177/1529100612453266">https://doi.org/10.1177/1529100612453266</a></li>
+        <li style="padding-left:2rem;text-indent:-2rem;margin-bottom:.5rem">Ebbinghaus, H. (1913). <em>Memory: A contribution to experimental psychology</em> (H. A. Ruger &amp; C. E. Bussenius, Trans.). Teachers College, Columbia University. (Original work published 1885)</li>
+        <li style="padding-left:2rem;text-indent:-2rem;margin-bottom:.5rem">Kalyuga, S., Ayres, P., Chandler, P., &amp; Sweller, J. (2003). The expertise reversal effect. <em>Educational Psychologist, 38</em>(1), 23–31. <a href="https://doi.org/10.1207/S15326985EP3801_4">https://doi.org/10.1207/S15326985EP3801_4</a></li>
+        <li style="padding-left:2rem;text-indent:-2rem;margin-bottom:.5rem">Kirschner, P. A., Sweller, J., &amp; Clark, R. E. (2006). Why minimal guidance during instruction does not work: An analysis of the failure of constructivist, discovery, problem-based, experiential, and inquiry-based teaching. <em>Educational Psychologist, 41</em>(2), 75–86. <a href="https://doi.org/10.1207/s15326985ep4102_1">https://doi.org/10.1207/s15326985ep4102_1</a></li>
+        <li style="padding-left:2rem;text-indent:-2rem;margin-bottom:.5rem">Kluger, A. N., &amp; DeNisi, A. (1996). The effects of feedback interventions on performance: A historical review, a meta-analysis, and a preliminary feedback intervention theory. <em>Psychological Bulletin, 119</em>(2), 254–284. <a href="https://doi.org/10.1037/0033-2909.119.2.254">https://doi.org/10.1037/0033-2909.119.2.254</a></li>
+        <li style="padding-left:2rem;text-indent:-2rem;margin-bottom:.5rem">Mayer, R. E. (2021). <em>Multimedia learning</em> (3rd ed.). Cambridge University Press.</li>
+        <li style="padding-left:2rem;text-indent:-2rem;margin-bottom:.5rem">Roediger, H. L., III, &amp; Karpicke, J. D. (2006). Test-enhanced learning: Taking memory tests improves long-term retention. <em>Psychological Science, 17</em>(3), 249–255. <a href="https://doi.org/10.1111/j.1467-9280.2006.01693.x">https://doi.org/10.1111/j.1467-9280.2006.01693.x</a></li>
+        <li style="padding-left:2rem;text-indent:-2rem;margin-bottom:.5rem">Skinner, B. F. (1968). <em>The technology of teaching</em>. Appleton-Century-Crofts.</li>
+        <li style="padding-left:2rem;text-indent:-2rem;margin-bottom:.5rem">Sweller, J. (1988). Cognitive load during problem solving: Effects on learning. <em>Cognitive Science, 12</em>(2), 257–285. <a href="https://doi.org/10.1207/s15516709cog1202_4">https://doi.org/10.1207/s15516709cog1202_4</a></li>
+        <li style="padding-left:2rem;text-indent:-2rem;margin-bottom:.5rem">Sweller, J. (2010). Element interactivity and intrinsic, extraneous, and germane cognitive load. <em>Educational Psychology Review, 22</em>(2), 123–138. <a href="https://doi.org/10.1007/s10648-010-9128-5">https://doi.org/10.1007/s10648-010-9128-5</a></li>
+        <li style="padding-left:2rem;text-indent:-2rem;margin-bottom:.5rem">Vygotsky, L. S. (1978). <em>Mind in society: The development of higher psychological processes</em>. Harvard University Press.</li>
+        <li style="padding-left:2rem;text-indent:-2rem;margin-bottom:.5rem">Wood, D., Bruner, J. S., &amp; Ross, G. (1976). The role of tutoring in problem solving. <em>Journal of Child Psychology and Psychiatry, 17</em>(2), 89–100. <a href="https://doi.org/10.1111/j.1469-7610.1976.tb00381.x">https://doi.org/10.1111/j.1469-7610.1976.tb00381.x</a></li>
+      </ul>
+    </details>
+    <p style="margin-top:1.4rem">Learning Science and Theory · a foundational interactive lesson for EdTech professionals.</p>
+  </div>
+</footer>
+
+<script>
+/* ---------- progress bar + nav highlight ---------- */
+(function(){
+  var bar=document.getElementById('progress');
+  var links=document.querySelectorAll('nav a');
+  var secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'));});
+  window.addEventListener('scroll',function(){
+    var h=document.documentElement;
+    var pct=h.scrollTop/(h.scrollHeight-h.clientHeight)*100;
+    bar.style.width=pct+'%';
+    var idx=0;
+    for(var i=0;i<secs.length;i++){if(secs[i].getBoundingClientRect().top<140)idx=i;}
+    links.forEach(function(a,i){a.classList.toggle('active',i===idx);});
+  },{passive:true});
+})();
+
+/* ---------- myth or fact ---------- */
+(function(){
+  var data=[
+    {s:"Re-reading and highlighting are among the best ways to make learning stick.",
+     myth:true,
+     why:"They feel productive, but testing yourself works far better. Retrieval strengthens memory. Re-reading mostly builds familiarity."},
+    {s:"Studying in several short sessions beats one long cram session, even when total time is equal.",
+     myth:false,
+     why:"Spreading practice over days produces learning that lasts. The forgetting between sessions is what makes each retrieval count."},
+    {s:"A polished, information-dense video is usually the most effective way to teach a complex topic.",
+     myth:true,
+     why:"It feels professional, but dense input often just overloads working memory. Chunked segments with practice beat polish."}
+  ];
+  var zone=document.getElementById('myths');
+  data.forEach(function(d){
+    var card=document.createElement('div');card.className='myth';
+    card.innerHTML='<p class="statement">'+d.s+'</p>'+
+      '<div class="btns"><button data-a="myth">Myth</button><button data-a="fact">Fact</button></div>'+
+      '<div class="verdict" role="status"></div>';
+    card.querySelectorAll('button').forEach(function(b){
+      b.addEventListener('click',function(){
+        var pickedMyth=b.dataset.a==='myth';
+        var correct=pickedMyth===d.myth;
+        var v=card.querySelector('.verdict');
+        v.className='verdict '+(correct?'good':'bad');
+        v.innerHTML='<b class="tag">'+(correct?'You got it. ':'Not quite. ')+'This one is a '+(d.myth?'myth':'fact')+'.</b>'+d.why;
+        card.classList.add('answered');
+      });
+    });
+    zone.appendChild(card);
+  });
+})();
+
+/* ---------- pipeline detail ---------- */
+(function(){
+  var info={
+    s:"<strong>Sensory memory</strong> holds raw sights and sounds for an instant: roughly half a second for visuals, two to three seconds for sounds. Attention decides what moves on. Anything on screen that competes for attention (decorative animations, background music, cluttered layouts) is stealing from that decision.",
+    w:"<strong>Working memory</strong> is where active thinking happens, and it is tiny. Early research put the limit near seven items (Miller's famous seven, plus or minus two). Modern estimates are closer to <strong>four chunks</strong> of new information, held for maybe 15 to 30 seconds unless the learner rehearses them. Every piece of learning has to squeeze through this bottleneck. Watch the diagram: both balls arrive here together, and their fates split. The green one gets rehearsed and crosses into long-term memory. The red one stalls and falls out. That is overflow being lost.",
+    l:"<strong>Long-term memory</strong> has no practical limit. Learning happens when information gets encoded from working memory into long-term memory as organized structures called <strong>schemas</strong>, and it gets stronger every time the learner pulls it back out."
+  };
+  var detail=document.getElementById('pipeDetail');
+  var btns=document.querySelectorAll('.pipe-btns button');
+  function show(key){
+    detail.innerHTML=info[key];
+    btns.forEach(function(b){b.setAttribute('aria-pressed',b.dataset.pipe===key?'true':'false');});
+  }
+  btns.forEach(function(b){b.addEventListener('click',function(){show(b.dataset.pipe);});});
+  ['S','W','L'].forEach(function(k){
+    var g=document.getElementById('pipe'+k);
+    if(g)g.addEventListener('click',function(){show(k.toLowerCase());});
+  });
+  show('s');
+})();
+
+/* ---------- cognitive load lab ---------- */
+(function(){
+  var segI=document.getElementById('segI'),segE=document.getElementById('segE'),segG=document.getElementById('segG'),msg=document.getElementById('loadMsg');
+  var t={text:document.getElementById('tgText'),music:document.getElementById('tgMusic'),anim:document.getElementById('tgAnim'),chunk:document.getElementById('tgChunk'),worked:document.getElementById('tgWorked')};
+  function update(){
+    var intr=t.chunk.checked?25:45;
+    var extr=(t.text.checked?25:0)+(t.music.checked?15:0)+(t.anim.checked?15:0);
+    var germ=t.worked.checked?25:5;
+    var total=intr+extr+germ;
+    var scale=total>100?100/total:1;
+    segI.style.width=(intr*scale)+'%';segI.textContent=intr>=15?'Intrinsic '+intr:'';
+    segE.style.width=(extr*scale)+'%';segE.textContent=extr>=15?'Extraneous '+extr:'';
+    segG.style.width=(germ*scale)+'%';segG.textContent=germ>=15?'Germane '+germ:'';
+    if(total>100){
+      msg.className='over';
+      msg.innerHTML='<strong>Overload: '+total+' / 100.</strong> Working memory is full and learning stalls. Notice what is crowding it out: the coral segment teaches nothing. Cut the extraneous load before touching anything else.';
+    }else if(extr===0&&t.chunk.checked&&t.worked.checked){
+      msg.className='ideal';
+      msg.innerHTML='<strong>'+total+' / 100. This is the target.</strong> Intrinsic load is managed by chunking, extraneous load is gone, and the spare capacity is feeding germane load through the worked example and practice.';
+    }else{
+      msg.className='';
+      msg.innerHTML='<strong>'+total+' / 100.</strong> There is room in working memory. The question is what fills it. Try turning everything on and watch the meter, then find the combination a designer should ship.';
+    }
+  }
+  Object.keys(t).forEach(function(k){t[k].addEventListener('change',update);});
+  update();
+})();
+
+/* ---------- theory tabs ---------- */
+(function(){
+  var tabs=[['tabB','panB'],['tabC','panC'],['tabK','panK']];
+  tabs.forEach(function(pair){
+    document.getElementById(pair[0]).addEventListener('click',function(){
+      tabs.forEach(function(p){
+        document.getElementById(p[0]).setAttribute('aria-selected',p[0]===pair[0]?'true':'false');
+        document.getElementById(p[1]).hidden=p[1]!==pair[1];
+      });
+    });
+  });
+})();
+
+/* ---------- matching activity ---------- */
+(function(){
+  var items=[
+    {f:"Flashcard drills with streaks and instant right/wrong feedback",a:"B",
+     why:"Timed repetition, immediate feedback, and reward mechanics shape behavior through reinforcement. Classic behaviorism."},
+    {f:"Short grammar explainers with clear diagrams and chunked examples",a:"C",
+     why:"Organizing content for working memory limits and pairing words with relevant visuals is cognitivist design, straight from Mayer and Sweller."},
+    {f:"Weekly live conversation practice with a tutor who prompts and corrects",a:"K",
+     why:"A more capable partner supporting performance inside the Zone of Proximal Development. Social constructivism, with the tutor as scaffold."},
+    {f:"A mastery gate: learners must pass the drill before the next unit unlocks",a:"B",
+     why:"Requiring the behavior to be demonstrated before advancing is behaviorist mastery design."},
+    {f:"Worked example solutions that gradually fade into independent practice",a:"C",
+     why:"Fading worked examples manage intrinsic load while schemas form. A signature cognitivist move."},
+    {f:"A capstone project reviewed by peers in a discussion forum",a:"K",
+     why:"Learners construct and defend their own understanding through authentic work and social interaction. Constructivism."}
+  ];
+  var names={B:"Behaviorism",C:"Cognitivism",K:"Constructivism"};
+  var zone=document.getElementById('matchZone');
+  items.forEach(function(it){
+    var d=document.createElement('div');d.className='match-item';
+    var btns=Object.keys(names).map(function(k){return '<button data-k="'+k+'">'+names[k]+'</button>';}).join('');
+    d.innerHTML='<p>'+it.f+'</p><div class="choices">'+btns+'</div><div class="why"></div>';
+    d.querySelectorAll('button').forEach(function(b){
+      b.addEventListener('click',function(){
+        if(d.classList.contains('done'))return;
+        if(b.dataset.k===it.a){
+          b.classList.add('right');
+          d.classList.add('done');
+          d.querySelector('.why').innerHTML='<strong>'+names[it.a]+'.</strong> '+it.why;
+          d.querySelectorAll('button').forEach(function(x){x.disabled=true;});
+        }else{
+          b.classList.add('wrong');b.disabled=true;
+        }
+      });
+    });
+    zone.appendChild(d);
+  });
+})();
+
+/* ---------- strategy flip cards ---------- */
+(function(){
+  var cards=[
+    {n:"01",t:"Retrieval practice",f:"Pulling information out of memory strengthens it far more than putting it in again. Every act of retrieval is an act of learning, not just a measurement of it.",
+     b:["Low-stakes checks throughout, not only at the end","Brain-dump prompts before content is revealed","Cumulative quizzes","Flashcards for self-testing, never passive review"]},
+    {n:"02",t:"Spaced practice",f:"Study spread across days beats one long session. The forgetting between sessions is the point: retrieving what you partly forgot is what makes memory stick.",
+     b:["Drip-scheduled course releases","Spaced-repetition review systems","Booster micro-quizzes days or weeks after training","Later modules that circle back to earlier concepts"]},
+    {n:"03",t:"Interleaving",f:"Mixing problem types (ABCABC) beats practicing in blocks (AAABBBCCC). Blocked practice feels easier. That ease is the warning sign.",
+     b:["Mixed problem sets that force choosing an approach","Cumulative practice blending current and prior units","Varied scenario types inside one assessment"]},
+    {n:"04",t:"Feedback",f:"Among the strongest influences on learning ever measured, and among the most variable: badly designed feedback can even lower performance. A red X teaches almost nothing.",
+     b:["A rationale for every option, not just the correct one","Feedback that names the misconception behind the error","Delayed feedback where reflection matters more than speed"]}
+  ];
+  var zone=document.getElementById('flips');
+  cards.forEach(function(c){
+    var d=document.createElement('div');d.className='flip';
+    d.innerHTML='<button class="flipbtn" aria-label="Flip card: '+c.t+'"></button>'+
+      '<div class="flip-inner"><div class="flip-face flip-front"><span class="num">'+c.n+'</span><h3>'+c.t+'</h3><p>'+c.f+'</p><span class="hint">Tap to see design moves</span></div>'+
+      '<div class="flip-face flip-back"><h4>'+c.t+' · in your designs</h4><ul>'+c.b.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div></div>';
+    d.querySelector('.flipbtn').addEventListener('click',function(){d.classList.toggle('flipped');});
+    zone.appendChild(d);
+  });
+})();
+
+/* ---------- forgetting curve toggle ---------- */
+(function(){
+  var m=document.getElementById('btnMassed'),s=document.getElementById('btnSpaced');
+  var cm=document.getElementById('curveMassed'),cs=document.getElementById('curveSpaced'),lab=document.getElementById('curveLabel');
+  function set(spaced){
+    m.setAttribute('aria-pressed',spaced?'false':'true');
+    s.setAttribute('aria-pressed',spaced?'true':'false');
+    cm.style.opacity=spaced?0.18:1;
+    cs.style.opacity=spaced?1:0;
+    if(spaced){lab.textContent='most of it survives';lab.setAttribute('y','92');lab.setAttribute('fill','#0E6B67');}
+    else{lab.textContent='most of it is gone';lab.setAttribute('y','205');lab.setAttribute('fill','#B23F1B');}
+  }
+  m.addEventListener('click',function(){set(false);});
+  s.addEventListener('click',function(){set(true);});
+})();
+
+/* ---------- decision lens: diagnose the brief ---------- */
+(function(){
+  var outMeta={
+    fluency:{label:"Fluency, procedure, or habit",lean:"Lean behaviorist",d:"Drill, reinforcement, and mastery gates. Build repeated practice to fluency with immediate corrective feedback, and let learners advance only when the behavior is reliable."},
+    concepts:{label:"Concepts and mental models",lean:"Lean cognitivist",d:"Chunk the content to working memory limits, open with worked examples that fade into practice, and follow the multimedia principles so words and visuals carry different weight."},
+    judgment:{label:"Judgment and transfer",lean:"Lean constructivist",d:"Scenarios, projects, and coaching. Put learners inside realistic gray-area cases, scaffold the early attempts, and debrief with reflection so the judgment transfers."}
+  };
+  var lrnMeta={
+    novice:{label:"Novices",d:"Raise the guidance: more structure, more worked examples, more scaffolding. Unguided discovery would leave them stranded."},
+    mixed:{label:"A mix",d:"Build a guided core with off-ramps: scaffolds that novices use and veterans can skip. One course for everyone so often serves no one, unless you design the off-ramps."},
+    expert:{label:"Experienced",d:"Lower the guidance: problem-first designs work, and novice scaffolds can actually slow experts down. That is the expertise reversal effect."}
+  };
+  var briefs=[
+    {brief:"A pharmacy chain is rolling out a new returns procedure at the register. The steps are fixed, speed and accuracy both matter, and the staff are new hires with no retail background.",
+     outcome:"fluency",learner:"novice",
+     fbOut:{fluency:"Right. Fixed steps, where speed and accuracy both count, is the signature of a procedural fluency outcome.",
+            concepts:"The brief is not asking staff to understand a model. The steps are fixed. Look at what success means here and try again.",
+            judgment:"There is no gray area in this brief. The procedure has one right way. Look again."},
+     fbLrn:{novice:"Right. No retail background means no schemas to build on, so the guidance goes up.",
+            mixed:"The brief says new hires with no retail background. That is one clear group. Try again.",
+            expert:"No retail background at all. These learners are the opposite of experts here. Try again."},
+     final:"For this brief: drill the fixed steps to mastery with immediate corrective feedback, and scaffold heavily. Worked demonstration first, guided practice second, speed last."},
+    {brief:"A SaaS company wants customers to genuinely understand its permissions model before they configure it. The audience ranges from first-time admins to veterans migrating from rival platforms.",
+     outcome:"concepts",learner:"mixed",
+     fbOut:{concepts:"Right. The brief's own word is understand. They need a working mental model of permissions before they act on it.",
+            fluency:"Configuration is not a fixed drill, and the goal the brief names is understanding, not speed. Try again.",
+            judgment:"Close. Configuration involves decisions, but the stated gap is understanding the model itself. Concepts come first. Try again."},
+     fbLrn:{mixed:"Right. First-timers and veterans in one audience. Design the guided core, then the off-ramps.",
+            novice:"Some are first-timers, but the veterans are in the room too. Read the range again.",
+            expert:"The veterans are there, but so are first-time admins. Read the range again."},
+     final:"For this brief: build a chunked conceptual core with worked configuration examples, then add optional depth that veterans can skip and first-timers can lean on."},
+    {brief:"A consultancy wants its senior analysts to get sharper at scoping ambiguous client requests, the kind of work where there is rarely one right answer.",
+     outcome:"judgment",learner:"expert",
+     fbOut:{judgment:"Right. Rarely one right answer is the signature of a judgment and transfer outcome.",
+            fluency:"Scoping ambiguous requests cannot be drilled as fixed steps. There is rarely one right answer. Try again.",
+            concepts:"Senior analysts already hold the concepts. The gap is exercising judgment where the answers are murky. Try again."},
+     fbLrn:{expert:"Right. Senior analysts. Lower the guidance, and remember the expertise reversal effect.",
+            novice:"Senior analysts are not novices. Scaffolds built for beginners could actually slow them down. Try again.",
+            mixed:"The brief names one group: senior analysts. Try again."},
+     final:"For this brief: realistic gray-area scoping scenarios with reflective debriefs and peer discussion. Low guidance, high authenticity."}
+  ];
+  var idx=0;
+  var elBrief=document.getElementById('dgBrief'),elCount=document.getElementById('dgCount'),
+      stepB=document.getElementById('dgStepB'),optsA=document.getElementById('dgOptsA'),
+      optsB=document.getElementById('dgOptsB'),fbA=document.getElementById('dgFbA'),
+      fbB=document.getElementById('dgFbB'),res=document.getElementById('dgResult'),
+      next=document.getElementById('dgNext');
+  function buildOpts(zone,meta,order,fb,fbZone,onCorrect,correctKey){
+    zone.innerHTML='';
+    fbZone.className='dg-fb';fbZone.textContent='';
+    order.forEach(function(k){
+      var b=document.createElement('button');
+      b.textContent=meta[k].label;
+      b.addEventListener('click',function(){
+        if(k===correctKey){
+          b.classList.add('right');
+          zone.querySelectorAll('button').forEach(function(x){x.disabled=true;});
+          fbZone.className='dg-fb good';fbZone.textContent=fb[k];
+          onCorrect();
+        }else{
+          b.classList.add('wrong');b.disabled=true;
+          fbZone.className='dg-fb bad';fbZone.textContent=fb[k];
+        }
+      });
+      zone.appendChild(b);
+    });
+  }
+  function render(){
+    var d=briefs[idx];
+    elCount.textContent='Brief '+(idx+1)+' of '+briefs.length;
+    elBrief.textContent=d.brief;
+    stepB.hidden=true;res.hidden=true;next.hidden=true;
+    buildOpts(optsA,outMeta,['fluency','concepts','judgment'],d.fbOut,fbA,function(){
+      stepB.hidden=false;
+      buildOpts(optsB,lrnMeta,['novice','mixed','expert'],d.fbLrn,fbB,function(){
+        var last=idx===briefs.length-1;
+        res.hidden=false;
+        res.innerHTML='<h4>'+outMeta[d.outcome].lean+'</h4><p style="margin-bottom:.6rem">'+outMeta[d.outcome].d+'</p><p style="margin-bottom:.6rem">'+lrnMeta[d.learner].d+'</p><p style="margin:0"><strong>'+d.final+'</strong></p>'+(last?'<p style="margin:.8rem 0 0">Three briefs, three different design directions. That is the lens working.</p>':'');
+        next.hidden=false;
+        next.textContent=last?'Diagnose them again':'Next brief';
+      },d.learner);
+    },d.outcome);
+  }
+  next.addEventListener('click',function(){
+    idx=(idx+1)%briefs.length;
+    render();
+    document.getElementById('diagnose').scrollIntoView({block:'nearest'});
+  });
+  render();
+})();
+
+/* ---------- quiz ---------- */
+(function(){
+  var Q=[
+    {lo:"LO1 · Understand",q:"Why does chunking content into smaller segments improve learning?",
+     o:["It reduces the total amount of content learners must study",
+        "It keeps new information within the limits of working memory",
+        "It increases the intrinsic complexity of the material",
+        "It eliminates the need for practice activities"],c:1,
+     r:["Not quite. Chunking reorganizes content rather than reducing it. The win is elsewhere: each segment now fits inside working memory so it can be encoded.",
+        "Right. Working memory holds only a few chunks of new information at once. Chunking keeps each segment inside that limit so the information can be encoded into long-term memory.",
+        "The opposite. Intrinsic load comes from the material itself; chunking manages that load rather than increasing it.",
+        "No. Practice remains essential for encoding and retrieval. Chunking sizes the input; practice does the learning."]},
+    {lo:"LO1 · Understand",q:"A course page displays dense on-screen text while a narrator reads different content aloud, over looping background music. Which type of cognitive load is this design primarily increasing?",
+     o:["Intrinsic load","Germane load","Extraneous load","Retrieval load"],c:2,
+     r:["Intrinsic load comes from the complexity of the content, not its presentation. This problem lives entirely in the presentation.",
+        "Germane load is productive schema-building effort. Nothing here builds schemas.",
+        "Right. Competing text, narration, and music force working memory to process input that contributes nothing to learning. That is the definition of extraneous load.",
+        "There is no such category. Cognitive Load Theory names three: intrinsic, extraneous, germane."]},
+    {lo:"LO2 · Analyze",q:"A math app awards a streak badge each day a learner completes a timed multiplication drill with instant right/wrong feedback. Which learning theory most directly informs this design?",
+     o:["Behaviorism","Cognitivism","Constructivism","Social constructivism"],c:0,
+     r:["Right. Timed drills, immediate feedback, and reward mechanics shape observable behavior through reinforcement. Classic behaviorist design.",
+        "Cognitivism would focus on how the content is organized for memory. That is not the emphasis of this feature.",
+        "There is no meaning-construction or scenario here. Just stimulus, response, and reinforcement.",
+        "No social interaction is involved. No peers, no more-capable partner, no ZPD."]},
+    {lo:"LO2 · Analyze",q:"A design team debates two versions of a troubleshooting course. Version 1 presents each diagnostic rule with a worked example, then practice. Version 2 drops learners into an open-ended simulated breakdown with a coach for hints. For complete novices, what is the strongest evidence-based critique of choosing Version 2 alone?",
+     o:["Simulations cannot measure learning outcomes",
+        "Novices lack the prior knowledge to construct understanding efficiently without structured guidance",
+        "Coaching violates constructivist principles",
+        "Worked examples only benefit expert learners"],c:1,
+     r:["Simulations can absolutely be assessed. The problem is elsewhere.",
+        "Right. Low-guidance constructivist designs assume learners have existing schemas to build on. Novices without them experience overload and learn slowly.",
+        "The reverse. Scaffolding through coaching is central to social constructivism.",
+        "Backwards. Worked examples benefit novices most. Experts are the ones who outgrow them (the expertise reversal effect)."]},
+    {lo:"LO3 · Apply",q:"A designer wants to strengthen long-term retention in a 6-module onboarding program. Which revision best applies spaced practice?",
+     o:["Adding a cumulative final exam at the end of module 6",
+        "Making each module's quiz harder",
+        "Adding brief reviews of earlier modules at the start of each new module, plus a booster quiz two weeks after completion",
+        "Requiring learners to re-read each module before its quiz"],c:2,
+     r:["That is a single massed event. Spacing means distributing retrieval across sessions over time.",
+        "Difficulty alone is not spacing. The practice still is not distributed over time.",
+        "Right. Recurring reviews and a delayed booster distribute retrieval of the same content across multiple sessions over time, which is exactly what spaced practice means.",
+        "Passive re-reading is one of the weakest strategies tested. Retrieval beats it decisively."]},
+    {lo:"LO4 · Apply",q:"A client needs experienced financial advisors to improve judgment in ethically ambiguous client situations. Which design approach best fits the outcome and audience?",
+     o:["Timed drills on regulation definitions with badges",
+        "A narrated slide presentation summarizing the code of ethics",
+        "Branching scenarios with realistic gray-area cases, followed by reflective debrief and peer discussion",
+        "A glossary of ethics terminology with flashcards"],c:2,
+     r:["A behaviorist fluency tool mismatched to a judgment outcome. Knowing definitions is not exercising judgment.",
+        "Passive information transmission is unlikely to change decision-making behavior.",
+        "Right. Complex judgment and transfer for an expert audience is exactly the profile that constructivist, scenario-based design with reflection fits best.",
+        "Another fluency tool. Vocabulary is not the gap here; judgment is."]}
+  ];
+  var idx=0,score=0,answered=false;
+  var card=document.getElementById('quizCard'),prog=document.getElementById('quizProg');
+  function render(){
+    answered=false;
+    var q=Q[idx];
+    prog.textContent='Question '+(idx+1)+' of '+Q.length+' · '+q.lo+' · Score '+score;
+    var opts=q.o.map(function(o,i){return '<button class="qopt" data-i="'+i+'">'+String.fromCharCode(65+i)+'. '+o+'</button>';}).join('');
+    card.innerHTML='<p class="qtext">'+q.q+'</p>'+opts+'<div class="qrationale" role="status"></div>'+
+      '<div class="qnav"><span style="font-size:.8rem;color:var(--ink-soft)">Pick an answer to see why</span><button id="qNext" disabled>'+(idx===Q.length-1?'See my score':'Next question')+'</button></div>';
+    card.querySelectorAll('.qopt').forEach(function(b){
+      b.addEventListener('click',function(){
+        if(answered)return;
+        answered=true;
+        var i=+b.dataset.i;
+        var right=i===q.c;
+        if(right)score++;
+        card.querySelectorAll('.qopt').forEach(function(x){
+          x.disabled=true;
+          if(+x.dataset.i===q.c)x.classList.add('right');
+        });
+        if(!right)b.classList.add('wrong');
+        var ra=card.querySelector('.qrationale');
+        ra.style.display='block';
+        ra.innerHTML='<strong>'+(right?'Correct. ':'Not this one. ')+'</strong>'+q.r[i]+(right?'':'<br><br><strong>The answer is '+String.fromCharCode(65+q.c)+'.</strong> '+q.r[q.c]);
+        prog.textContent='Question '+(idx+1)+' of '+Q.length+' · '+q.lo+' · Score '+score;
+        document.getElementById('qNext').disabled=false;
+      });
+    });
+    document.getElementById('qNext').addEventListener('click',function(){
+      idx++;
+      if(idx<Q.length){render();}else{finish();}
+      card.scrollIntoView({block:'nearest'});
+    });
+  }
+  function finish(){
+    prog.textContent='Complete';
+    /* Completion signal for LMS / xAPI / analytics wiring.
+       Host page can either listen for the event:
+         window.addEventListener('lesson:quiz-complete', e => sendToLRS(e.detail));
+       or define a callback before this file loads:
+         window.lessonCompletionHook = payload => { ... };
+       payload = {lesson, score, total, percent} */
+    try{
+      var payload={lesson:'learning-science-and-theory',score:score,total:Q.length,percent:Math.round(score/Q.length*100)};
+      window.dispatchEvent(new CustomEvent('lesson:quiz-complete',{detail:payload}));
+      if(typeof window.lessonCompletionHook==='function')window.lessonCompletionHook(payload);
+    }catch(e){}
+    var msg;
+    if(score===6)msg='A clean sweep. Your instincts and the evidence now agree.';
+    else if(score>=4)msg='Solid. Revisit the rationales you missed. Retrieving them again in a few days will do more than re-reading this page ever could.';
+    else msg='This is exactly what a first retrieval attempt is for. The struggle is the encoding. Skim Sections 2 and 3, then come back in two days and try again. That is spaced practice, and now it is yours.';
+    card.innerHTML='<div id="quizScore"><div class="big">'+score+' / 6</div><p style="max-width:480px;margin:0 auto 1.2rem">'+msg+'</p><button class="qopt" style="max-width:240px;margin:0 auto;text-align:center;font-weight:600" id="qRestart">Take it again</button></div>';
+    document.getElementById('qRestart').addEventListener('click',function(){idx=0;score=0;render();});
+  }
+  render();
+})();
+</script>
+</body>
+</html>
